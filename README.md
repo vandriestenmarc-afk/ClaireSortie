@@ -22,15 +22,16 @@ Hospital-to-home transitions combine medication changes, follow-up, warning sign
 
 ClairSortie is intentionally not a generic summary chatbot. Its product thesis is: **a discharge explanation is useful only when the user can see its evidence, its uncertainty, and what they understood.**
 
-## One-click public demo
+## Public demo
 
 1. Open the live demo.
-2. Select **Voir la démo en 1 clic**.
-3. Inspect each category and its **Source exacte**.
-4. Open **Quiz** to test comprehension.
-5. Copy, print, or export the structured plan.
+2. Select **Charger l’exemple**.
+3. Select **Créer mon plan**.
+4. Inspect each category and its **Source exacte**.
+5. Open **Quiz** to test comprehension.
+6. Copy, print, or export the structured plan.
 
-The public demo runs locally in the browser, needs no credentials, and can work offline after the first visit. It uses synthetic data only.
+The public demo runs locally in the browser, needs no credentials, sends no document to a network service, and uses synthetic data only. The separate video link opens the public YouTube presentation.
 
 ## Product experience
 
@@ -38,9 +39,8 @@ The public demo runs locally in the browser, needs no credentials, and can work 
 - exact source passage on every item;
 - uncertainty is displayed, never silently filled;
 - teach-back-inspired comprehension quiz with source-based correction;
-- one-click demo, keyboard-operable tabs, reduced-motion support, mobile-first layout;
+- clear two-step sample flow, keyboard-operable tabs, reduced-motion support, mobile-first layout;
 - copy, print, and JSON export;
-- installable/offline PWA behavior;
 - two engines behind one interface: deterministic local fallback and secure GPT-5.6 server mode.
 
 ## Architecture
@@ -67,8 +67,7 @@ Key files:
 - `server/gpt56-server.js` — same-origin static server plus `/api/health` and `/api/extract`;
 - `examples/gpt-5.6-server.example.js` — GPT-5.6 request, strict schema, validation boundary;
 - `tests/` — local extraction, non-invention, request construction, injected-client end-to-end path;
-- `.github/workflows/ci.yml` — syntax checks and automated tests;
-- `sw.js` and `manifest.webmanifest` — offline/installable public demo.
+- `.github/workflows/ci.yml` — syntax checks and automated tests.
 
 ## Run locally without an API key
 
@@ -134,7 +133,9 @@ The primary Codex build thread rebuilt the initial single-file concept into the 
 - wrote the initial automated tests and documentation;
 - created the initial server-side GPT-5.6 integration direction and ran the original test/static-server checks.
 
-The key human product decisions were to prioritize evidence over fluent summaries, make uncertainty a first-class output, keep the public demo credential-free, keep GPT-5.6 server-side, use synthetic data only, and require human clinical review. The final repository hardening adds the integrated server route, stricter request validation, injected-client tests, CI, offline support, and the judge path.
+The connection is explicit: **Codex built the product foundation and the initial GPT-5.6 integration direction; GPT-5.6 is the secure server-side extraction engine that produces the evidence-linked plan.** The public demo remains local only because a secret API key must never be embedded in GitHub Pages.
+
+The key human product decisions were to prioritize evidence over fluent summaries, make uncertainty a first-class output, keep the public demo credential-free, keep GPT-5.6 server-side, use synthetic data only, and require human clinical review. The final repository hardening adds the integrated server route, stricter request validation, injected-client tests, CI, and the judge path.
 
 Evidence of the Build Week work is visible in the [merged Codex pull request](https://github.com/vandriestenmarc-afk/ClaireSortie/pull/1), timestamped commit history, and the `/feedback` Session ID supplied in Devpost.
 
