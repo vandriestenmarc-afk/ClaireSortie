@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: clairsortie-gpt56
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --ignore-scripts --no-audit --no-fund
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PUBLIC_GPT56_DEMO
+        value: "true"
+      - key: OPENAI_API_KEY
+        sync: false
