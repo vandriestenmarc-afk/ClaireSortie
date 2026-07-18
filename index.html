@@ -4,23 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#123f3b">
-  <meta name="description" content="ClairSortie transforme un document de sortie synthétique en plan d’action traçable, sans masquer les incertitudes.">
-  <meta property="og:title" content="ClairSortie — comprendre sa sortie">
-  <meta property="og:description" content="Un plan de sortie lisible, chaque consigne reliée à sa source exacte.">
-  <meta property="og:type" content="website">
+  <meta name="description" content="ClairSortie transforme un document de sortie synthétique en plan d’action traçable.">
   <title>ClairSortie — comprendre sa sortie</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#workspace">Aller au contenu</a>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="ClairSortie, accueil"><span aria-hidden="true">C</span> ClairSortie</a>
-    <div class="header-meta">
-      <span class="prototype">Prototype · données fictives</span>
-      <a class="source-link" href="https://github.com/vandriestenmarc-afk/ClaireSortie" rel="noreferrer">Code source</a>
-    </div>
+    <span class="prototype">Prototype · données fictives</span>
   </header>
 
   <main id="top">
@@ -28,14 +20,10 @@
       <div>
         <p class="eyebrow">Après l’hôpital, l’essentiel d’abord</p>
         <h1 id="hero-title">Une sortie plus claire.<br><em>Chaque consigne reliée à sa source.</em></h1>
-        <p class="hero-copy">ClairSortie transforme un texte de sortie <strong>synthétique</strong> en étapes lisibles, sans compléter ce que le document ne dit pas.</p>
-        <div class="hero-actions">
-          <button class="button primary" id="demo-button" type="button">Voir la démo en 1 clic <span aria-hidden="true">→</span></button>
-          <a class="text-link" href="#how-it-works">Découvrir l’approche</a>
-        </div>
+        <p class="hero-copy">Ce démonstrateur transforme un texte de sortie <strong>synthétique</strong> en étapes lisibles, sans compléter ce que le document ne dit pas.</p>
       </div>
       <div class="principles" aria-label="Principes de sécurité">
-        <span>01 · Données fictives</span><span>02 · Source exacte</span><span>03 · Incertitudes visibles</span><span>04 · Quiz de compréhension</span>
+        <span>01 · Extraction locale</span><span>02 · Source exacte</span><span>03 · Incertitudes visibles</span>
       </div>
     </section>
 
@@ -44,22 +32,8 @@
       <div><strong id="safety-title">Ce n’est pas un avis médical.</strong><p>Ne modifiez jamais un traitement sur la base de cette démo. En cas d’urgence, suivez les consignes du document et contactez les services d’urgence.</p></div>
     </aside>
 
-    <section class="proof-grid" aria-label="Ce que le prototype démontre">
-      <article><strong>5</strong><span>catégories structurées</span></article>
-      <article><strong>100 %</strong><span>des éléments reliés à un passage</span></article>
-      <article><strong>0</strong><span>donnée envoyée par la démo publique</span></article>
-    </section>
-
     <section class="workspace" id="workspace" aria-labelledby="input-title">
-      <div class="section-heading"><div><p class="step">Étape 1</p><h2 id="input-title">Document de sortie</h2></div><span class="local">Données synthétiques uniquement</span></div>
-
-      <label for="analysis-mode">Mode d’analyse</label>
-      <select id="analysis-mode" aria-describedby="mode-help">
-        <option value="local">Local — immédiat, sans réseau</option>
-        <option value="gpt56" disabled>GPT-5.6 — serveur sécurisé requis</option>
-      </select>
-      <p id="mode-help" class="help">La démo publique utilise le moteur local. Le mode GPT-5.6 s’active automatiquement quand l’application est lancée avec le serveur sécurisé fourni dans le dépôt.</p>
-
+      <div class="section-heading"><div><p class="step">Étape 1</p><h2 id="input-title">Document de sortie</h2></div><span class="local">Reste dans ce navigateur</span></div>
       <label for="medical-text">Texte médical fictif à analyser</label>
       <p id="input-help" class="help">N’utilisez aucune donnée réelle. L’exemple fourni est entièrement inventé.</p>
       <textarea id="medical-text" aria-describedby="input-help" placeholder="Collez un document synthétique ici…" spellcheck="false"></textarea>
@@ -71,15 +45,7 @@
     </section>
 
     <section class="results" id="results" aria-labelledby="results-title" hidden>
-      <div class="section-heading result-heading">
-        <div><p class="step">Étape 2</p><h2 id="results-title" tabindex="-1">Votre plan traçable</h2></div>
-        <div class="result-actions">
-          <button class="button export" id="copy-button" type="button">Copier</button>
-          <button class="button export" id="print-button" type="button">Imprimer</button>
-          <button class="button export" id="export-button" type="button">Exporter JSON</button>
-        </div>
-      </div>
-      <div class="engine-note" id="engine-note"></div>
+      <div class="section-heading"><div><p class="step">Étape 2</p><h2 id="results-title">Votre plan traçable</h2></div><button class="button export" id="export-button" type="button">Exporter JSON</button></div>
       <div class="result-summary" id="result-summary"></div>
       <nav class="tabs" aria-label="Sections du plan" role="tablist">
         <button role="tab" aria-selected="true" aria-controls="panel-plan" id="tab-plan" tabindex="0">Plan</button>
@@ -90,20 +56,8 @@
       <div id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden></div>
       <div id="panel-json" role="tabpanel" aria-labelledby="tab-json" hidden><pre id="json-output" tabindex="0"></pre></div>
     </section>
-
-    <section class="explain" id="how-it-works" aria-labelledby="approach-title">
-      <p class="eyebrow">Une IA qui montre ses preuves</p>
-      <h2 id="approach-title">Trois garde-fous avant toute utilité</h2>
-      <div class="explain-grid">
-        <article><span>1</span><h3>Extraire, pas inventer</h3><p>Les informations absentes restent absentes. Elles deviennent des points à faire confirmer.</p></article>
-        <article><span>2</span><h3>Relier chaque résultat</h3><p>Chaque élément affiche le passage exact du document qui le justifie.</p></article>
-        <article><span>3</span><h3>Vérifier la compréhension</h3><p>Le quiz reprend les sources pour aider l’utilisateur à repérer ce qu’il doit revoir.</p></article>
-      </div>
-      <p class="technical-note"><strong>Deux moteurs, une même règle de sécurité :</strong> la démo publique fonctionne localement. Le dépôt contient aussi un chemin serveur GPT-5.6 avec sortie JSON stricte et rejet automatique de toute citation qui n’existe pas mot pour mot dans le document.</p>
-    </section>
   </main>
-
-  <footer><strong>ClairSortie</strong><span>Prototype prudent, traçable et installable hors ligne.</span><a href="https://github.com/vandriestenmarc-afk/ClaireSortie" rel="noreferrer">Dépôt GitHub</a></footer>
+  <footer><strong>ClairSortie</strong><span>Une preuve de concept statique, prudente et transparente.</span><a href="https://github.com/vandriestenmarc-afk/ClaireSortie" rel="noreferrer">Code source</a></footer>
   <script type="module" src="src/app.js"></script>
 </body>
 </html>
