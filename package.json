@@ -1,1 +1,16 @@
-{"name":"clairsortie","version":"2.0.0","private":true,"type":"module","scripts":{"test":"node --test"},"engines":{"node":">=20"}}
+{
+  "name": "clairsortie",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "gpt56:demo": "node examples/run-gpt-5.6-example.js"
+  },
+  "dependencies": {
+    "openai": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
