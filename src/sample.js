@@ -1,0 +1,19 @@
+export const SAMPLE = `DOCUMENT DE SORTIE — EXEMPLE ENTIÈREMENT FICTIF
+Sortie du 18 juillet 2026 après une infection respiratoire en amélioration.
+
+MÉDICAMENTS
+- Commencer Amoxicilline 1 g : prendre 1 comprimé le matin, à midi et le soir, jusqu'au 24 juillet 2026.
+- Continuer Paracétamol 500 mg : prendre 1 à 2 comprimés en cas de douleur, sans dépasser 3 g par jour.
+- Arrêter l'Ibuprofène dès aujourd'hui.
+- Ne pas reprendre l'anticoagulant avant avis médical. Le nom de l'anticoagulant, sa dose et la date de reprise ne sont pas précisés.
+
+ACTIONS
+- Boire régulièrement et se reposer.
+- Mesurer la température matin et soir pendant 3 jours.
+
+SUIVI
+- Prendre rendez-vous avec le médecin traitant dans 48 à 72 heures.
+- Faire une radiographie du thorax dans 6 semaines. Le lieu n'est pas précisé.
+
+SIGNES D'ALERTE
+- Appeler le 15 ou le 112 en cas de difficulté importante à respirer, de lèvres bleues ou de malaise.`;
