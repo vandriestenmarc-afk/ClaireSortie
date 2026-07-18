@@ -197,12 +197,6 @@ async function detectGPT56Server() {
 
 $("#sample-button").addEventListener("click", loadSample);
 $("#analyze-button").addEventListener("click", analyze);
-$("#demo-button").addEventListener("click", async () => {
-  $("#analysis-mode").value = "local";
-  $("#medical-text").value = SAMPLE;
-  $("#workspace").scrollIntoView({ behavior: "smooth", block: "start" });
-  await analyze();
-});
 $("#copy-button").addEventListener("click", copyPlan);
 $("#print-button").addEventListener("click", () => window.print());
 $("#export-button").addEventListener("click", exportJson);
