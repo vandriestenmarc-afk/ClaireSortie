@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { extractPlan } from "../src/extractor.js";
+import { allPassagesAreExact, extractPlan } from "../src/extractor.js";
 import { SAMPLE } from "../src/sample.js";
 
 test("extracts every required category from the synthetic example", () => {
@@ -13,9 +13,7 @@ test("extracts every required category from the synthetic example", () => {
 });
 
 test("every extracted item contains an exact passage from the input", () => {
-  const plan = extractPlan(SAMPLE);
-  for (const key of ["medications", "appointments", "actions", "warningSigns", "uncertainties"])
-    for (const entry of plan[key]) assert.ok(SAMPLE.includes(entry.source.passage), `${key}: ${entry.source.passage}`);
+  assert.equal(allPassagesAreExact(extractPlan(SAMPLE), SAMPLE), true);
 });
 
 test("does not invent a dose, date, or location when none exists", () => {
@@ -24,4 +22,17 @@ test("does not invent a dose, date, or location when none exists", () => {
   assert.equal(plan.appointments.length, 1);
   assert.equal(plan.medications.length, 1);
   assert.doesNotMatch(json, /\bmg\b|\bg\b|202\d|hôpital/i);
+});
+
+test("recognizes a medication name that is not hard-coded", () => {
+  const source = "MÉDICAMENTS\n- Commencer Doxycycline 100 mg : un comprimé le soir pendant 5 jours.";
+  const plan = extractPlan(source);
+  assert.equal(plan.medications.length, 1);
+  assert.match(plan.medications[0].title, /Doxycycline — commencer/);
+  assert.equal(plan.medications[0].source.passage, "Commencer Doxycycline 100 mg : un comprimé le soir pendant 5 jours.");
+});
+
+test("rejects non-text input and oversized documents", () => {
+  assert.throws(() => extractPlan(null), /forme de texte/);
+  assert.throws(() => extractPlan("x".repeat(200_001)), /200 000/);
 });
