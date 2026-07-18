@@ -3,12 +3,12 @@
 ## 45-second public-demo path
 
 1. Open the [live demo](https://vandriestenmarc-afk.github.io/ClaireSortie/).
-2. Select **Voir la démo en 1 clic**.
+2. Select **Lancer la démo interactive**.
 3. Inspect the five categories, exact supporting passages, and explicit uncertainties.
 4. Open **Quiz** and answer one question incorrectly to see source-based feedback.
 5. Use **Copier**, **Imprimer**, or **Exporter JSON**.
 
-No account, installation, API key, or real data is required.
+The separate **Voir la vidéo de présentation · 1 min 59** link opens the public YouTube presentation. No account, installation, API key, or real data is required.
 
 ## GPT-5.6 path
 
@@ -25,8 +25,8 @@ The UI detects `/api/health` and enables **GPT-5.6 — serveur sécurisé**. The
 
 ## Judging-criteria map
 
-- **Technological implementation:** Codex-built modular app, deterministic fallback, end-to-end GPT-5.6 server route, strict schema, fail-closed quote validation, automated tests, CI, offline cache, and JSON export.
-- **Design:** one-click demo, mobile-first interface, keyboard-operable tabs, visible focus, reduced motion, print view, offline support, and explicit safety states.
+- **Technological implementation:** Codex-built modular app, deterministic fallback, end-to-end GPT-5.6 server route, strict schema, fail-closed quote validation, automated tests, CI, and JSON export.
+- **Design:** clearly separated interactive demo and presentation video, mobile-first interface, keyboard-operable tabs, visible focus, reduced motion, and print view.
 - **Potential impact:** focuses on medicines, follow-up, home actions, warning signs, and comprehension during the hospital-to-home transition.
 - **Quality of idea:** evidence-first output, uncertainty as a first-class category, and teach-back-inspired comprehension checks rather than an untraceable summary.
 
