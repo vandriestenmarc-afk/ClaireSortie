@@ -1,0 +1,19 @@
+{
+  "name": "ClairSortie",
+  "short_name": "ClairSortie",
+  "description": "Transforme un document de sortie synthétique en plan d’action traçable.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbfaf5",
+  "theme_color": "#123f3b",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,11 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { extractWithGPT56 } from "./gpt-5.6-server.example.js";
 
-const documentPath = process.argv[2];
-if (!documentPath) {
-  console.error("Usage: npm run gpt56:demo -- path/to/synthetic-document.txt");
-  process.exit(1);
-}
+const documentPath = process.argv[2] || "examples/sample-discharge.txt";
 
 try {
   const document = await readFile(documentPath, "utf8");
