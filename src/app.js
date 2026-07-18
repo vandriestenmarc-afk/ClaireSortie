@@ -24,7 +24,12 @@ function setBusy(busy) {
   const button = $("#analyze-button");
   button.disabled = busy;
   button.setAttribute("aria-busy", String(busy));
-  button.innerHTML = busy ? "Analyse en cours…" : 'Créer mon plan <span aria-hidden="true">→</span>';
+  const liveMode = $("#analysis-mode").value === "gpt56";
+  button.innerHTML = busy
+    ? "Analyse GPT-5.6 en cours…"
+    : liveMode
+      ? 'Créer avec GPT-5.6 <span aria-hidden="true">→</span>'
+      : 'Créer mon plan <span aria-hidden="true">→</span>';
 }
 
 function normalizePlan(plan) {
@@ -63,13 +68,21 @@ function renderQuiz(plan) {
   </form>`;
 }
 
+function verificationText(plan) {
+  const proof = plan?._verification;
+  if (!proof) return "Sortie structurée puis citations vérifiées mot pour mot.";
+  const id = proof.responseId ? ` · réponse ${proof.responseId}` : "";
+  const cache = proof.cached ? " · résultat sécurisé mis en cache" : " · nouvel appel effectué";
+  return `${proof.model || "gpt-5.6"}${id}${cache} · citations vérifiées mot pour mot.`;
+}
+
 function render(plan) {
   const keys = Object.keys(categoryLabels);
   const total = keys.reduce((sum, key) => sum + plan[key].length, 0);
   const isGPT56 = /gpt-5\.6/i.test(plan.generatedBy);
 
   $("#engine-note").innerHTML = isGPT56
-    ? '<strong>GPT-5.6 · serveur sécurisé</strong><span>Sortie structurée puis citations vérifiées mot pour mot.</span>'
+    ? `<strong>GPT-5.6 en fonctionnement réel</strong><span>${escapeHtml(verificationText(plan))}</span>`
     : '<strong>Moteur local · sans réseau</strong><span>Règles prudentes pour une démonstration immédiate et privée.</span>';
   $("#result-summary").innerHTML = `<strong>${total} éléments repérés</strong><p>Chaque élément affiche le passage exact qui le justifie. Les champs absents restent absents.</p>`;
   $("#plan-content").innerHTML = keys.map(key => `
@@ -134,12 +147,12 @@ async function analyze() {
 
   const mode = $("#analysis-mode").value;
   setBusy(true);
-  setStatus(mode === "gpt56" ? "Analyse sécurisée avec GPT-5.6…" : "Analyse locale en cours…");
+  setStatus(mode === "gpt56" ? "Appel réel à GPT-5.6 via le serveur sécurisé…" : "Analyse locale en cours…");
   try {
     const rawPlan = mode === "gpt56" ? await extractWithServer(text) : extractPlan(text);
     currentPlan = normalizePlan(rawPlan);
     render(currentPlan);
-    setStatus(mode === "gpt56" ? "Plan créé avec GPT-5.6 et citations vérifiées." : "Plan créé localement. Vérifiez toujours le document original.", "ok");
+    setStatus(mode === "gpt56" ? "Plan créé par GPT-5.6 via l’API Responses et citations vérifiées." : "Plan créé localement. Vérifiez toujours le document original.", "ok");
   } catch (error) {
     const message = error?.name === "AbortError" ? "Le serveur GPT-5.6 a dépassé le délai d’attente." : error.message;
     setStatus(message || "Une erreur est survenue pendant l’analyse.", "error");
@@ -153,7 +166,8 @@ function planAsText(plan) {
     const entries = plan[key].map(entry => `- ${entry.title}: ${entry.detail}\n  Source: “${entry.source.passage}”`).join("\n");
     return `${label}\n${entries || "- Aucune information explicitement détectée."}`;
   });
-  return `ClairSortie — plan traçable\nMoteur: ${plan.generatedBy}\n\n${sections.join("\n\n")}\n\nPrototype — ne remplace pas un professionnel de santé.`;
+  const verification = plan._verification?.responseId ? `\nRéponse OpenAI: ${plan._verification.responseId}` : "";
+  return `ClairSortie — plan traçable\nMoteur: ${plan.generatedBy}${verification}\n\n${sections.join("\n\n")}\n\nPrototype — ne remplace pas un professionnel de santé.`;
 }
 
 async function copyPlan() {
@@ -188,8 +202,20 @@ async function detectGPT56Server() {
     gpt56Available = true;
     const option = $('#analysis-mode option[value="gpt56"]');
     option.disabled = false;
-    option.textContent = `GPT-5.6 — serveur sécurisé (${data.model})`;
-    $("#mode-help").textContent = "Le serveur sécurisé est connecté. Les sorties GPT-5.6 sont structurées et chaque citation est vérifiée mot pour mot avant affichage.";
+    option.textContent = `GPT-5.6 — API Responses connectée (${data.model})`;
+    $("#analysis-mode").value = "gpt56";
+
+    if (data.sampleOnly) {
+      $("#medical-text").value = SAMPLE;
+      $("#medical-text").readOnly = true;
+      $("#sample-button").hidden = true;
+      $("#mode-help").textContent = "Démonstration publique sécurisée : GPT-5.6 analyse uniquement l’exemple synthétique fourni. La clé API reste sur le serveur.";
+    } else {
+      $("#mode-help").textContent = "Le serveur sécurisé est connecté. Les sorties GPT-5.6 sont structurées et chaque citation est vérifiée mot pour mot avant affichage.";
+    }
+
+    $("#analyze-button").innerHTML = 'Créer avec GPT-5.6 <span aria-hidden="true">→</span>';
+    setStatus("GPT-5.6 est connecté. Appuyez sur « Créer avec GPT-5.6 » pour lancer l’analyse réelle.", "ok");
   } catch {
     // Expected on the public GitHub Pages deployment.
   }
@@ -202,6 +228,7 @@ $("#print-button").addEventListener("click", () => window.print());
 $("#export-button").addEventListener("click", exportJson);
 $("#analysis-mode").addEventListener("change", event => {
   if (event.target.value === "gpt56" && !gpt56Available) event.target.value = "local";
+  setBusy(false);
 });
 
 const tabs = [...document.querySelectorAll('[role="tab"]')];

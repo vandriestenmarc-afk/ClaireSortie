@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildGPT56Request, extractWithGPT56, validateExactPassages } from "../examples/gpt-5.6-server.example.js";
+import { buildGPT56Request, extractWithGPT56, extractWithGPT56Detailed, validateExactPassages } from "../examples/gpt-5.6-server.example.js";
 
 const source = "- Médicament Alpha indiqué.\n- Suivi dans 48 heures.";
 const validPlan = {
@@ -12,6 +12,20 @@ const validPlan = {
   warningSigns: [],
   uncertainties: []
 };
+
+function injectedClient(extra = {}) {
+  return {
+    responses: {
+      create: async request => ({
+        output_text: JSON.stringify(validPlan),
+        id: "resp_build_week_test",
+        model: "gpt-5.6-sol",
+        request,
+        ...extra
+      })
+    }
+  };
+}
 
 test("builds a strict, private GPT-5.6 Responses API request", () => {
   const request = buildGPT56Request(source);
@@ -47,6 +61,16 @@ test("runs the complete GPT-5.6 path with an injected client", async () => {
   const plan = await extractWithGPT56(source, { client });
   assert.equal(receivedRequest.model, "gpt-5.6");
   assert.deepEqual(plan, validPlan);
+});
+
+test("returns verifiable Responses API metadata for the live judge path", async () => {
+  const result = await extractWithGPT56Detailed(source, { client: injectedClient() });
+  assert.deepEqual(result.plan, validPlan);
+  assert.equal(result.verification.provider, "OpenAI Responses API");
+  assert.equal(result.verification.model, "gpt-5.6-sol");
+  assert.equal(result.verification.responseId, "resp_build_week_test");
+  assert.equal(result.verification.storedByOpenAI, false);
+  assert.match(result.verification.generatedAt, /^\d{4}-\d{2}-\d{2}T/);
 });
 
 test("requires uncertainty entries to be explicitly marked", () => {

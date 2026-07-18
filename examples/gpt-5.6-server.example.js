@@ -85,13 +85,14 @@ export function buildGPT56Request(syntheticDocument) {
   };
 }
 
-export async function extractWithGPT56(syntheticDocument, { client } = {}) {
-  const activeClient = client || (() => {
-    if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is required on the trusted server.");
-    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  })();
+function getClient(client) {
+  if (client) return client;
+  if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is required on the trusted server.");
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
-  const response = await activeClient.responses.create(buildGPT56Request(syntheticDocument));
+export async function extractWithGPT56Detailed(syntheticDocument, { client } = {}) {
+  const response = await getClient(client).responses.create(buildGPT56Request(syntheticDocument));
   if (!response.output_text) throw new Error("GPT-5.6 returned no structured output.");
 
   let plan;
@@ -100,5 +101,20 @@ export async function extractWithGPT56(syntheticDocument, { client } = {}) {
   } catch {
     throw new Error("GPT-5.6 returned output that could not be parsed as JSON.");
   }
-  return validateExactPassages(plan, syntheticDocument);
+
+  return {
+    plan: validateExactPassages(plan, syntheticDocument),
+    verification: {
+      provider: "OpenAI Responses API",
+      model: response.model || GPT56_MODEL,
+      responseId: response.id || null,
+      generatedAt: new Date().toISOString(),
+      storedByOpenAI: false
+    }
+  };
+}
+
+export async function extractWithGPT56(syntheticDocument, options = {}) {
+  const { plan } = await extractWithGPT56Detailed(syntheticDocument, options);
+  return plan;
 }

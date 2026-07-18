@@ -2,12 +2,17 @@ import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { extractWithGPT56, GPT56_MODEL } from "../examples/gpt-5.6-server.example.js";
+import { extractWithGPT56Detailed, GPT56_MODEL } from "../examples/gpt-5.6-server.example.js";
+import { SAMPLE } from "../src/sample.js";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 8000);
 const MAX_BODY_BYTES = 250_000;
+const PUBLIC_DEMO_MODE = process.env.PUBLIC_GPT56_DEMO === "true";
+
+let cachedSampleResult = null;
+let sampleRequestInFlight = null;
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -66,12 +71,33 @@ function resolveStaticPath(requestUrl) {
   return file;
 }
 
+async function runPublicSample() {
+  if (cachedSampleResult) return { ...cachedSampleResult, cached: true };
+  if (!sampleRequestInFlight) {
+    sampleRequestInFlight = extractWithGPT56Detailed(SAMPLE)
+      .then(({ plan, verification }) => {
+        cachedSampleResult = {
+          ...plan,
+          _verification: { ...verification, cached: false, sampleOnly: true }
+        };
+        return cachedSampleResult;
+      })
+      .finally(() => {
+        sampleRequestInFlight = null;
+      });
+  }
+  return sampleRequestInFlight;
+}
+
 const server = createServer(async (req, res) => {
   try {
     if (req.method === "GET" && req.url === "/api/health") {
       return json(res, 200, {
         gpt56: Boolean(process.env.OPENAI_API_KEY),
         model: GPT56_MODEL,
+        publicDemo: PUBLIC_DEMO_MODE,
+        sampleOnly: PUBLIC_DEMO_MODE,
+        lastSuccessfulRun: cachedSampleResult?._verification?.generatedAt || null,
         privacy: "no document retention by ClairSortie"
       });
     }
@@ -79,8 +105,17 @@ const server = createServer(async (req, res) => {
     if (req.method === "POST" && req.url === "/api/extract") {
       if (!process.env.OPENAI_API_KEY) return json(res, 503, { error: "GPT-5.6 server mode is not configured." });
       const body = await readJson(req);
-      const plan = await extractWithGPT56(body?.document);
-      return json(res, 200, plan);
+      const document = body?.document;
+
+      if (PUBLIC_DEMO_MODE) {
+        if (typeof document !== "string" || document.trim() !== SAMPLE.trim()) {
+          return json(res, 400, { error: "The public GPT-5.6 judge demo accepts only the bundled synthetic example." });
+        }
+        return json(res, 200, await runPublicSample());
+      }
+
+      const { plan, verification } = await extractWithGPT56Detailed(document);
+      return json(res, 200, { ...plan, _verification: { ...verification, cached: false, sampleOnly: false } });
     }
 
     if (req.method !== "GET" && req.method !== "HEAD") return json(res, 405, { error: "Method not allowed." });
@@ -108,4 +143,5 @@ const server = createServer(async (req, res) => {
 server.listen(PORT, HOST, () => {
   console.log(`ClairSortie: http://${HOST}:${PORT}`);
   console.log(process.env.OPENAI_API_KEY ? `GPT-5.6 mode enabled (${GPT56_MODEL}).` : "GPT-5.6 mode disabled: set OPENAI_API_KEY on this trusted server.");
+  if (PUBLIC_DEMO_MODE) console.log("Public judge demo mode: bundled synthetic sample only.");
 });
