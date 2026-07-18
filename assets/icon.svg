@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ClairSortie">
+  <rect width="512" height="512" rx="112" fill="#123f3b"/>
+  <circle cx="256" cy="256" r="166" fill="#d9ef9f"/>
+  <path d="M320 171c-21-22-49-34-82-34-66 0-116 50-116 119 0 69 49 119 117 119 34 0 64-12 85-36l-38-39c-12 13-27 20-45 20-34 0-59-26-59-64 0-37 25-64 59-64 17 0 32 7 44 20z" fill="#123f3b"/>
+</svg>
