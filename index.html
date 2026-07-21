@@ -6,12 +6,14 @@
   <meta name="theme-color" content="#123f3b">
   <meta name="description" content="ClairSortie transforme un document de sortie synthétique en plan d’action traçable, sans masquer les incertitudes.">
   <meta property="og:title" content="ClairSortie — comprendre sa sortie">
-  <meta property="og:description" content="Un plan de sortie lisible, chaque consigne reliée à sa source exacte.">
+  <meta property="og:description" content="Une démonstration GPT-5.6 en direct, avec chaque consigne reliée à sa source exacte.">
   <meta property="og:type" content="website">
-  <meta name="clairsortie-build" content="2026-07-21-render-video-v5">
+  <meta property="og:url" content="https://clairsortie-gpt56.onrender.com/">
+  <meta name="clairsortie-build" content="2026-07-21-render-live-v6">
+  <link rel="canonical" href="https://clairsortie-gpt56.onrender.com/">
   <title>ClairSortie — comprendre sa sortie</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20260721-render-video-v5">
+  <link rel="stylesheet" href="styles.css?v=20260721-render-live-v6">
 </head>
 <body>
   <a class="skip-link" href="#workspace">Aller au contenu</a>
@@ -30,10 +32,11 @@
         <h1 id="hero-title">Une sortie plus claire.<br><em>Chaque consigne reliée à sa source.</em></h1>
         <p class="hero-copy">ClairSortie transforme un texte de sortie <strong>synthétique</strong> en étapes lisibles, sans compléter ce que le document ne dit pas.</p>
         <div class="hero-actions">
-          <a class="button primary video-button" href="https://youtu.be/sGNNWfXMEEw" target="_blank" rel="noreferrer">Regarder la vidéo de présentation · 1 min 59</a>
+          <a class="button primary" href="https://clairsortie-gpt56.onrender.com/">Essayer la démo GPT‑5.6 en direct</a>
+          <a class="button secondary video-button" href="https://youtu.be/sGNNWfXMEEw" target="_blank" rel="noreferrer">Regarder la vidéo · 1 min 59</a>
           <a class="text-link" href="#how-it-works">Découvrir l’approche</a>
         </div>
-        <p class="help">La vidéo finale s’ouvre sur YouTube. Pour tester l’application, utilisez « Charger l’exemple » puis « Créer mon plan » ci-dessous.</p>
+        <p class="help">Sur Render, GPT‑5.6 s’active automatiquement. GitHub Pages reste une solution de secours locale sans appel API.</p>
       </div>
       <div class="principles" aria-label="Principes de sécurité">
         <span>01 · Données fictives</span><span>02 · Source exacte</span><span>03 · Incertitudes visibles</span><span>04 · Quiz de compréhension</span>
@@ -48,7 +51,7 @@
     <section class="proof-grid" aria-label="Ce que le prototype démontre">
       <article><strong>5</strong><span>catégories structurées</span></article>
       <article><strong>100 %</strong><span>des éléments reliés à un passage</span></article>
-      <article><strong>0</strong><span>donnée envoyée par la démo publique</span></article>
+      <article><strong>1</strong><span>exemple entièrement synthétique</span></article>
     </section>
 
     <section class="explain" id="build-week" aria-labelledby="build-week-title">
@@ -64,13 +67,13 @@
         <article>
           <span aria-hidden="true">2</span>
           <h3>GPT‑5.6</h3>
-          <p>Le dépôt contient un moteur serveur exécutable utilisant GPT‑5.6, un schéma JSON strict et le rejet de toute citation absente du document source.</p>
+          <p>Le serveur Render appelle GPT‑5.6 avec un schéma JSON strict, puis rejette toute citation absente du document source.</p>
           <p><a class="text-link" href="https://github.com/vandriestenmarc-afk/ClaireSortie/blob/main/examples/gpt-5.6-server.example.js" target="_blank" rel="noreferrer">Voir l’intégration GPT‑5.6</a></p>
         </article>
         <article>
           <span aria-hidden="true">3</span>
           <h3>Transparence</h3>
-          <p>GitHub Pages utilise le moteur local pour ne jamais exposer de clé API. Le mode GPT‑5.6 s’exécute sur le serveur sécurisé fourni dans le dépôt.</p>
+          <p>Render est le parcours jury GPT‑5.6. GitHub Pages conserve le même produit en mode local, sans secret et sans appel réseau.</p>
           <p><a class="text-link" href="https://github.com/vandriestenmarc-afk/ClaireSortie/blob/main/docs/JUDGING.md" target="_blank" rel="noreferrer">Lire le parcours des jurés</a></p>
         </article>
       </div>
@@ -84,7 +87,7 @@
         <option value="local">Local — immédiat, sans réseau</option>
         <option value="gpt56" disabled>GPT-5.6 — serveur sécurisé requis</option>
       </select>
-      <p id="mode-help" class="help">La démo publique utilise le moteur local. Le mode GPT-5.6 s’active automatiquement quand l’application est lancée avec le serveur sécurisé fourni dans le dépôt.</p>
+      <p id="mode-help" class="help">Le mode GPT‑5.6 s’active automatiquement quand cette interface est servie par le serveur Render sécurisé.</p>
 
       <label for="medical-text">Texte médical fictif à analyser</label>
       <p id="input-help" class="help">N’utilisez aucune donnée réelle. L’exemple fourni est entièrement inventé.</p>
@@ -125,11 +128,11 @@
         <article><span>2</span><h3>Relier chaque résultat</h3><p>Chaque élément affiche le passage exact du document qui le justifie.</p></article>
         <article><span>3</span><h3>Vérifier la compréhension</h3><p>Le quiz reprend les sources pour aider l’utilisateur à repérer ce qu’il doit revoir.</p></article>
       </div>
-      <p class="technical-note"><strong>Deux moteurs, une même règle de sécurité :</strong> la démo publique fonctionne localement. Le dépôt contient aussi un chemin serveur GPT-5.6 avec sortie JSON stricte et rejet automatique de toute citation qui n’existe pas mot pour mot dans le document.</p>
+      <p class="technical-note"><strong>Deux moteurs, une même règle de sécurité :</strong> Render exécute GPT‑5.6 côté serveur avec la clé protégée. GitHub Pages reste le secours local. Dans les deux cas, les informations absentes ne sont pas inventées.</p>
     </section>
   </main>
 
-  <footer><strong>ClairSortie</strong><span>Prototype prudent et traçable · version jury vidéo finale</span><a href="https://github.com/vandriestenmarc-afk/ClaireSortie" rel="noreferrer">Dépôt GitHub</a></footer>
-  <script type="module" src="src/app.js?v=20260721-render-video-v5"></script>
+  <footer><strong>ClairSortie</strong><span>Prototype prudent et traçable · démo jury GPT‑5.6</span><a href="https://github.com/vandriestenmarc-afk/ClaireSortie" rel="noreferrer">Dépôt GitHub</a></footer>
+  <script type="module" src="src/app.js?v=20260721-render-live-v6"></script>
 </body>
 </html>
