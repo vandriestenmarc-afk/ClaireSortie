@@ -10,7 +10,7 @@ const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 8000);
 const MAX_BODY_BYTES = 250_000;
 const PUBLIC_DEMO_MODE = process.env.PUBLIC_GPT56_DEMO === "true";
-const BUILD_ID = "2026-07-21-render-video-v3";
+const BUILD_ID = "2026-07-21-render-video-v4";
 const PRESENTATION_VIDEO_URL = "https://youtu.be/sGNNWfXMEEw";
 
 let cachedSampleResult = null;
