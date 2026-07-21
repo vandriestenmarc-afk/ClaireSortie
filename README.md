@@ -10,7 +10,7 @@
 
 - **Live GPT-5.6 judge demo:** https://clairsortie-gpt56.onrender.com/
 - **Credential-free local fallback:** https://vandriestenmarc-afk.github.io/ClaireSortie/
-- **Public video:** https://youtu.be/sGNNWfXMEEw
+- **Public video:** https://youtu.be/-oq7drrrEZk
 - **Judge quick path:** [docs/JUDGING.md](docs/JUDGING.md)
 
 ## Why this problem matters
