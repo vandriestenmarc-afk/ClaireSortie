@@ -12,7 +12,7 @@
 
 No judge account, installation, API key, or real patient data is required. The public endpoint accepts only the bundled synthetic example. The project owner’s API key remains on the Render server and is never sent to the browser.
 
-The public video is available here: https://youtu.be/sGNNWfXMEEw
+The public video is available here: https://youtu.be/-oq7drrrEZk
 
 ## Credential-free fallback
 
