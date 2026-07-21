@@ -9,7 +9,7 @@
 5. Open **Quiz** and answer one question incorrectly to see source-based feedback.
 6. Use **Copier**, **Imprimer**, or **Exporter JSON**.
 
-No account, installation, API key, or real data is required. The separate **Regarder la vidéo de présentation · 1 min 59** link opens the public YouTube video; it is not an application demo control.
+No account, installation, API key, or real data is required. The separate **Regarder la vidéo de présentation** link opens the public YouTube video; it is not an application demo control.
 
 ## Codex evidence
 
