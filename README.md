@@ -9,7 +9,7 @@
 > **Safety:** this is a hackathon prototype, not a medical device or medical advice. Never enter real patient data or change treatment based on this software. A clinician or pharmacist must review any real-world use.
 
 - **Live demo:** https://vandriestenmarc-afk.github.io/ClaireSortie/
-- **Public video:** https://youtu.be/sGNNWfXMEEw
+- **Public video:** https://youtu.be/-oq7drrrEZk
 - **Judge quick path:** [docs/JUDGING.md](docs/JUDGING.md)
 
 ## Why this problem matters
