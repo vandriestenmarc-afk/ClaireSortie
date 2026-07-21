@@ -15,5 +15,5 @@ Final Devpost values:
 
 - Repository: `https://github.com/vandriestenmarc-afk/ClaireSortie`
 - Demo: `https://vandriestenmarc-afk.github.io/ClaireSortie/`
-- Video: `https://youtu.be/sGNNWfXMEEw`
+- Video: `https://youtu.be/-oq7drrrEZk`
 - Category: `Apps for Your Life`
