@@ -10,6 +10,8 @@ const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 8000);
 const MAX_BODY_BYTES = 250_000;
 const PUBLIC_DEMO_MODE = process.env.PUBLIC_GPT56_DEMO === "true";
+const BUILD_ID = "2026-07-21-render-video-v2";
+const PRESENTATION_VIDEO_URL = "https://youtu.be/sGNNWfXMEEw";
 
 let cachedSampleResult = null;
 let sampleRequestInFlight = null;
@@ -30,6 +32,7 @@ function securityHeaders(extra = {}) {
     "Referrer-Policy": "no-referrer",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Content-Security-Policy": "default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'",
+    "X-ClairSortie-Build": BUILD_ID,
     ...extra
   };
 }
@@ -37,7 +40,9 @@ function securityHeaders(extra = {}) {
 function json(res, status, payload) {
   res.writeHead(status, securityHeaders({
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
+    "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+    "Pragma": "no-cache",
+    "Expires": "0"
   }));
   res.end(JSON.stringify(payload));
 }
@@ -97,6 +102,8 @@ const server = createServer(async (req, res) => {
         model: GPT56_MODEL,
         publicDemo: PUBLIC_DEMO_MODE,
         sampleOnly: PUBLIC_DEMO_MODE,
+        build: BUILD_ID,
+        presentationVideo: PRESENTATION_VIDEO_URL,
         lastSuccessfulRun: cachedSampleResult?._verification?.generatedAt || null,
         privacy: "no document retention by ClairSortie"
       });
@@ -129,7 +136,9 @@ const server = createServer(async (req, res) => {
     const body = await readFile(file);
     res.writeHead(200, securityHeaders({
       "Content-Type": mime[extname(file).toLowerCase()] || "application/octet-stream",
-      "Cache-Control": extname(file) === ".html" ? "no-cache" : "public, max-age=300"
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+      "Pragma": "no-cache",
+      "Expires": "0"
     }));
     if (req.method === "HEAD") return res.end();
     res.end(body);
@@ -142,6 +151,7 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(`ClairSortie: http://${HOST}:${PORT}`);
+  console.log(`Build: ${BUILD_ID}`);
   console.log(process.env.OPENAI_API_KEY ? `GPT-5.6 mode enabled (${GPT56_MODEL}).` : "GPT-5.6 mode disabled: set OPENAI_API_KEY on this trusted server.");
   if (PUBLIC_DEMO_MODE) console.log("Public judge demo mode: bundled synthetic sample only.");
 });
